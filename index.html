@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz do Amor 💘</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, Arial, sans-serif;
+      background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 26px;
+    }
+
+    .progress {
+      height: 10px;
+      width: 100%;
+      background: #ffd6de;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 18px 0 22px;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: #ff4d6d;
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .question {
+      font-size: 20px;
+      margin: 12px 0 18px;
+    }
+
+    .answers {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    button {
+      border: none;
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+    }
+
+    .btn {
+      background: white;
+    }
+
+    .btn-special {
+      background: #ff4d6d;
+      color: white;
+      font-weight: 700;
+    }
+
+    .final {
+      display: none;
+    }
+
+    .heart {
+      position: absolute;
+      opacity: 0.15;
+      font-size: 120px;
+      right: -20px;
+      top: -40px;
+      transform: rotate(20deg);
+      pointer-events: none;
+    }
+
+    .yesno {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin-top: 20px;
+      position: relative;
+      height: 70px;
+      align-items: center;
+    }
+
+    #noBtn {
+      position: relative;
+    }
+
+    .result {
+      font-size: 20px;
+      margin-top: 18px;
+      font-weight: 700;
+      color: #ff2d55;
+    }
+
+    .small {
+      font-size: 14px;
+      opacity: 0.75;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="heart">💗</div>
+    <h1>Quiz do Amor 💘</h1>
+
+    <div class="progress">
+      <div class="bar" id="bar"></div>
+    </div>
+
+    <div id="quiz">
+      <div class="question" id="question"></div>
+      <div class="answers" id="answers"></div>
+    </div>
+
+    <div class="final" id="final">
+      <div class="question">Will you be my Valentine? 💝</div>
+
+      <div class="yesno">
+        <button class="btn-special" id="yesBtn">YES 😍</button>
+        <button class="btn" id="noBtn">No 🙃</button>
+      </div>
+
+      <div class="result" id="result"></div>
+      <div class="small" id="smallText"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        q: "Onde foi o nosso primeiro encontro? 🥰",
+        a: ["No café", "No parque", "No cinema", "Noutro sítio"]
+      },
+      {
+        q: "Qual é a coisa que eu mais adoro em ti? 💖",
+        a: ["O teu sorriso", "O teu carinho", "O teu humor", "Tudo (óbvio)"]
+      },
+      {
+        q: "Qual seria a nossa viagem perfeita? ✈️",
+        a: ["Paris", "Itália", "Praia", "Qualquer lugar contigo"]
+      },
+      {
+        q: "Quem é o amor da minha vida? 😌",
+        a: ["Tu", "Tu", "Tu", "Tu (de novo)"]
+      }
+    ];
+
+    let current = 0;
+
+    const questionEl = document.getElementById("question");
+    const answersEl = document.getElementById("answers");
+    const barEl = document.getElementById("bar");
+    const quizEl = document.getElementById("quiz");
+    const finalEl = document.getElementById("final");
+
+    function updateProgress() {
+      const percent = (current / (questions.length + 1)) * 100;
+      barEl.style.width = percent + "%";
+    }
+
+    function showQuestion() {
+      updateProgress();
+      const item = questions[current];
+      questionEl.textContent = item.q;
+      answersEl.innerHTML = "";
+
+      item.a.forEach(ans => {
+        const btn = document.createElement("button");
+        btn.className = "btn";
+        btn.textContent = ans;
+        btn.onclick = () => next();
+        answersEl.appendChild(btn);
+      });
+    }
+
+    function next() {
+      current++;
+      if (current >= questions.length) {
+        quizEl.style.display = "none";
+        finalEl.style.display = "block";
+        barEl.style.width = "100%";
+      } else {
+        showQuestion();
+      }
+    }
+
+    showQuestion();
+
+    // FINAL
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const resultEl = document.getElementById("result");
+    const smallTextEl = document.getElementById("smallText");
+
+    yesBtn.addEventListener("click", () => {
+      resultEl.textContent = "AAAAA EU SABIA!!! 💘💘💘";
+      smallTextEl.textContent = "Agora dá-me um beijo 😌";
+      noBtn.style.display = "none";
+    });
+
+    // botão "No" foge
+    noBtn.addEventListener("mouseenter", () => {
+      const x = Math.floor(Math.random() * 240) - 120;
+      const y = Math.floor(Math.random() * 120) - 60;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    noBtn.addEventListener("click", () => {
+      resultEl.textContent = "Hmm... tenta outra vez 😇";
+      smallTextEl.textContent = "Esse botão não funciona.";
+    });
+  </script>
+</body>
+</html>
