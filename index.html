@@ -194,29 +194,34 @@
     }
 
     function showQuestion() {
-      updateProgress();
-      const item = questions[current];
-      
-      // Lógica da Imagem (Passo C)
-      const imgEl = document.getElementById("quiz-img");
-      if (item.img) {
-        imgEl.src = item.img;
-        imgEl.style.display = "block"; // Mostra a imagem
-      } else {
-        imgEl.style.display = "none";  // Esconde se não houver foto
-      }
+  updateProgress();
+  const item = questions[current];
+  const imgEl = document.getElementById("quiz-img");
 
-      questionEl.textContent = item.q;
-      answersEl.innerHTML = "";
+  // Se houver imagem definida no objeto da pergunta
+  if (item.img && item.img.trim() !== "") {
+    imgEl.src = item.img;
+    imgEl.style.display = "block";
+    
+    // Se a imagem não carregar por algum motivo, não quebra o site
+    imgEl.onerror = function() {
+      this.style.display = "none";
+    };
+  } else {
+    imgEl.style.display = "none";
+  }
 
-      item.a.forEach(ans => {
-        const btn = document.createElement("button");
-        btn.className = "btn";
-        btn.textContent = ans;
-        btn.onclick = () => next();
-        answersEl.appendChild(btn);
-      });
-    }
+  questionEl.textContent = item.q;
+  answersEl.innerHTML = "";
+
+  item.a.forEach(ans => {
+    const btn = document.createElement("button");
+    btn.className = "btn";
+    btn.textContent = ans;
+    btn.onclick = () => next();
+    answersEl.appendChild(btn);
+  });
+}
     function next() {
       current++;
       if (current >= questions.length) {
