@@ -139,10 +139,12 @@
       <div class="bar" id="bar"></div>
     </div>
 
-    <div id="quiz">
-      <div class="question" id="question"></div>
-      <div class="answers" id="answers"></div>
-    </div>
+   <div id="quiz">
+    <img id="quiz-img" src="" style="width: 100%; border-radius: 15px; display: none; margin-bottom: 10px;">
+  
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+   </div>
 
     <div class="final" id="final">
       <div class="question">Will you be my Valentine? 💝</div>
@@ -162,6 +164,7 @@
       {
         q: "Onde foi o nosso primeiro encontro? 🥰",
         a: ["No café", "No parque", "No cinema", "Noutro sítio"]
+        img: "juntos.jpg"
       },
       {
         q: "Qual é a coisa que eu mais adoro em ti? 💖",
@@ -193,6 +196,16 @@
     function showQuestion() {
       updateProgress();
       const item = questions[current];
+      
+      // Lógica da Imagem (Passo C)
+      const imgEl = document.getElementById("quiz-img");
+      if (item.img) {
+        imgEl.src = item.img;
+        imgEl.style.display = "block"; // Mostra a imagem
+      } else {
+        imgEl.style.display = "none";  // Esconde se não houver foto
+      }
+
       questionEl.textContent = item.q;
       answersEl.innerHTML = "";
 
@@ -204,7 +217,6 @@
         answersEl.appendChild(btn);
       });
     }
-
     function next() {
       current++;
       if (current >= questions.length) {
