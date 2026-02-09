@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz do Amor 💘</title>
+  <title>Teste da Namorada 💘</title>
+
 
   <style>
     body {
@@ -154,6 +155,35 @@
   animation: pulse 2s infinite;
 }
 
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease-in-out;
+  z-index: 9999;
+  color: white;
+  text-align: center;
+}
+
+.final-heart {
+  font-size: 50px;
+  animation: beat 1.5s infinite;
+}
+
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
 @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.05); }
@@ -167,7 +197,7 @@
 <body>
   <div class="card">
     <div class="heart">💗</div>
-    <h1>Quiz do Amor 💘</h1>
+    <h1>Teste da Namorada hihi 💘</h1>
 
     <div class="progress">
       <div class="bar" id="bar"></div>
@@ -191,22 +221,32 @@
       <div class="result" id="result"></div>
       <div class="small" id="smallText"></div>
     </div>
+    <div id="overlay">
+  <div class="final-heart">❤️</div>
+  <p>Para sempre.</p>
+  </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
     // Configuração dos passos
     const steps = [
-      { type: "quiz", q: "Olá, tu és muito bonita. Queres ser minha namorada? 🥰", a: ["Sim", "Claro", "Todas as anteriores"], img: "juntos.jpeg" },
-      { type: "narrative", q: "Oh espera... nós já somos namorados... 😂", img: "juntos.jpeg", btnText: "Pois é! Próximo..." },
-      { type: "narrative", q: "E dia 14 é Dia dos Namorados! 🌹", img: "juntos.jpeg", btnText: "Mal posso esperar! ✨" },
-      { type: "narrative", q: "Espera... antes disso tenho algumas questões! 🤔", img: "juntos.jpeg", btnText: "Estou pronta!" },
-      { type: "quiz", q: "Achas-me sexy? 😏", a: ["Demasiado", "Um braseiro", "O meu Deus Grego"], img: "juntos.jpeg" },
-      { type: "quiz", q: "Queres fazer amor comigo? 🔥", a: ["Hoje?", "Agora?", "Sempre!"], img: "juntos.jpeg" },
+      { type: "quiz", q: "Olá, tu és muito bonita 🫠🫠🫠 Queres ser minha namorada? 🥰", a: ["Sim", "Claro", "Todas as anteriores"], img: "bonita.jpeg" },
+      { type: "narrative", q: "Oh espera... nós já somos namorados... 😂", img: "juntos.jpeg", btnText: "Pois é!😅😅😁😁" },
+      { type: "narrative", q: "E dia 14 é Dia dos Namorados! 🌹", img: "dia.jpeg", btnText: "Não me digas!😯😯" },
+      { type: "narrative", q: "Espera... antes disso tenho algumas questões! 🤔", img: "ready.jpeg", btnText: "Ai é?? I'm ready!" },
+      { type: "quiz", q: "Achas-me sexy? 😏", a: ["Muy caliente🥵🥵 guapissimooo!!", "Tanto que se tivesses aqui a Suécia ficava sem neve...💦💦", "A minha coisinha sexy 🫦🫦"], img: "hot.jpeg" },
+      { type: "quiz", q: "Queres fazer amor comigo? 🔥", a: ["Hoje?", "Agora?", "Sempre!"], img: "amor.jpeg" },
       { type: "celebrity", q: "Qual destes é o amor da tua vida? 🧐", img: "" },
-      { type: "range", q: "Hmmm... será que gostas de mim o suficiente? Quanto? 📏", img: "juntos.jpeg" },
-      { type: "narrative", q: "Ok... então... 🫣", img: "juntos.jpeg", btnText: "Diz lá..." },
-      { type: "final", q: "Will you be my Valentine? 💝", img: "juntos.jpeg" }
+      { type: "range", q: "Hmmm... será que gostas de mim o suficiente? Quanto? 📏", img: "gostas.jpeg" },
+      { type: "narrative", q: "Ok... então... 🫣", img: "pikena.jpeg", btnText: "Diz lá..." },
+      { type: "final", q: "Will you be my Valentine? 💝", img: "valentine.jpeg" },
+      { type: "narrative", q: "Sempre soube 😁, minha lindona do meu coração 😊❤️❤️", img: "besinho.jpeg", btnText: "Eu sou a tua lindona🫠" },
+      { type: "narrative", q: "O meu site preferido será sempre ao teu lado🥺❤️", img: "lado.jpeg", btnText: "Paraaa🫠🫠" },
+      { type: "narrative", q: "Amo-te muito meu amor, para sempre.❤️❤️❤️", img: "olhos.jpeg", btnText: "Amo-te muito, meu Neezinho🥺❤️" },
+      { type: "narrative", q: "E viveram felizes para sempre ❤️", img: "last.jpeg", btnText: "Fim ❤️", isLast: true}
     ];
+   
 
     let current = 0;
     const questionEl = document.getElementById("question");
@@ -260,11 +300,16 @@
 
         const btn = document.createElement("button");
         btn.className = "btn-special";
-        btn.textContent = "Confirmar Amor";
+        btn.textContent = "This much!!";
         btn.style.marginTop = "10px";
         btn.onclick = () => {
-            if(slider.value < 80) {
-                alert("Só isso? Tenta outra vez! 😤");
+            const valor = parseInt(slider.value); // Convertemos para número para garantir
+
+            if (valor < 80) {
+              alert("Só isso? Tenta outra vez! 😤");
+            } 
+            else if (valor >= 80 && valor <= 99) {
+              alert("Hmmm... podia ser um bocadinho mais...😒");
             } else {
                 next();
             }
@@ -341,13 +386,45 @@
       yesBtn.style.transform = `scale(${yesSize})`;
     });
 
-    yesBtn.addEventListener("click", () => {
-      yesBtn.style.transform = "scale(20)";
-      yesBtn.style.transition = "transform 0.5s ease-in";
+   yesBtn.addEventListener("click", () => {
+      // 1. Disparar a chuva de corações
+      const duration = 3 * 1000; // 3 segundos de corações
+      const end = Date.now() + duration;
+
+      (function frame() {
+        // Configuração dos corações
+        confetti({
+          particleCount: 3,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#ff4d6d', '#ffb6c1', '#ff0000'],
+          shapes: ['heart'] // Só funciona com a biblioteca carregada
+        });
+        confetti({
+          particleCount: 3,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#ff4d6d', '#ffb6c1', '#ff0000'],
+          shapes: ['heart']
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+
+      // 2. Feedback visual no botão
+      yesBtn.style.transform = "scale(1.3)";
+      yesBtn.innerHTML = "SIIIIIM! ❤️";
+
+      // 3. Esperar a chuva de corações e depois avançar
       setTimeout(() => {
-        finalEl.innerHTML = "<h1 style='color:white; position:relative; z-index:100;'>Sempre soube, minha lindona! ❤️</h1><p style='color:white; position:relative; z-index:100;'>Amo-te muito, para sempre.</p>";
-        document.body.style.backgroundColor = "#ff4d6d";
-      }, 300);
+        finalEl.style.display = "none";
+        quizEl.style.display = "block";
+        next();
+      }, 3500); // Espera 3.5 segundos antes de mudar de slide
     });
   </script>
 </body>
